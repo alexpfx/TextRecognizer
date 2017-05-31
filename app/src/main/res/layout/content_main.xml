@@ -9,19 +9,11 @@
     tools:context="com.github.alexpfx.samples.mobilevision.textrecognizer.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:id="@+id/btn_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="scan"
-        android:onClick="textScan"
-        />
+    <fragment
+        android:id="@+id/code_list_fragment"
+        android:name="com.github.alexpfx.samples.mobilevision.textrecognizer.CodeListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
-    <TextView
-        android:id="@+id/txt_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="result"
-        />
 </android.support.constraint.ConstraintLayout>

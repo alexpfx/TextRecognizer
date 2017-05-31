@@ -4,22 +4,15 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
@@ -29,6 +22,7 @@ import java.io.IOException;
 public class ScanTextActivity extends AppCompatActivity {
 
     private static final String TAG = "ScanTextActivity";
+    public static final String DETECTED_TEXT = "detected_text";
     SurfaceView cameraPreview;
 
     @Override
@@ -47,10 +41,21 @@ public class ScanTextActivity extends AppCompatActivity {
     private void createCameraSource() {
         TextRecognizer textRecognizer = new TextRecognizer.Builder(this).build();
 
+        textRecognizer.setProcessor(new CodeDetectorProcessor(new IsbnValidator(), new CodeDetectorProcessor.CodeProcessorListener() {
+            @Override
+            public void onReceiveDetection(TextBlock item) {
+                Log.d(TAG, "onReceiveDetection: "+item.getValue());
+                Intent intent = new Intent();
+                intent.putExtra(DETECTED_TEXT, item.getValue());
+                setResult(CommonStatusCodes.SUCCESS, intent);
+                finish();
+            }
+        }));
+
         final CameraSource cameraSource = new CameraSource.Builder(this, textRecognizer)
                 .setAutoFocusEnabled(true)
-                .setRequestedFps(2)
-                .setRequestedPreviewSize(1200, 1024)
+                .setRequestedFps(10f)
+                .setRequestedPreviewSize(640, 480)
                 .build();
 
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -65,6 +70,7 @@ public class ScanTextActivity extends AppCompatActivity {
                 }
                 try {
                     cameraSource.start(cameraPreview.getHolder());
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -81,29 +87,7 @@ public class ScanTextActivity extends AppCompatActivity {
             }
         });
 
-        textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
-            @Override
-            public void release() {
 
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<TextBlock> detections) {
-                SparseArray<TextBlock> detectedItems = detections.getDetectedItems();
-                if (detectedItems.size() > 0){
-//                    Intent intent = new Intent();
-//                    intent.putExtra("orc", detectedItems.valueAt(0).getValue());
-//                    setResult(CommonStatusCodes.SUCCESS, intent);
-
-                    for (int i = 0; i < detectedItems.size(); i++) {
-                        Log.d(TAG, "receiveDetections: "+detectedItems.valueAt(i).getValue());
-                    }
-                }
-
-
-
-            }
-        });
 
     }
 
