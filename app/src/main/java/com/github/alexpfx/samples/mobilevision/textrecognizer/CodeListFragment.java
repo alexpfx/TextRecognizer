@@ -46,7 +46,7 @@ public class CodeListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_code_list, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        setupRecycler ();
+        setupRecycler();
         return view;
     }
 
@@ -70,7 +70,7 @@ public class CodeListFragment extends Fragment {
 
 
     @OnClick(R.id.btn_scan)
-    void scanOnClick (){
+    void scanOnClick() {
         Intent intent = new Intent(getActivity(), ScanTextActivity.class);
         startActivityForResult(intent, 1001);
     }
@@ -79,9 +79,12 @@ public class CodeListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == CommonStatusCodes.SUCCESS && requestCode == 1001){
-            String code = data.getStringExtra(ScanTextActivity.DETECTED_TEXT);
-            mCodesAdapter.addItem(new Code(code));
+        if (resultCode == CommonStatusCodes.SUCCESS && requestCode == 1001) {
+            if (data != null) {
+
+                String code = data.getStringExtra(ScanTextActivity.DETECTED_TEXT);
+                mCodesAdapter.addItem(new Code(code));
+            }
         }
 
 

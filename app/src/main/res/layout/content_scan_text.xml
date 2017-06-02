@@ -8,11 +8,28 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.github.alexpfx.samples.mobilevision.textrecognizer.ScanTextActivity"
     tools:showIn="@layout/activity_scan_text">
-    <SurfaceView
-        android:id="@+id/camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
 
-        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <SurfaceView
+            android:id="@+id/camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            />
+
+        <com.github.alexpfx.samples.mobilevision.textrecognizer.CameraOverlay
+            android:id="@+id/camera_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+        </com.github.alexpfx.samples.mobilevision.textrecognizer.CameraOverlay>
+
+
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

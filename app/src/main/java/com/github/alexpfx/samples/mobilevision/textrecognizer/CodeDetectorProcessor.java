@@ -17,6 +17,7 @@ public class CodeDetectorProcessor implements com.google.android.gms.vision.Dete
 
 
     public CodeDetectorProcessor() {
+
     }
 
 
@@ -24,6 +25,7 @@ public class CodeDetectorProcessor implements com.google.android.gms.vision.Dete
         mProcessorListener = processorListener;
         mTextBlockValidator = textBlockValidator;
     }
+
 
     @Override
     public void release() {
@@ -55,9 +57,11 @@ public class CodeDetectorProcessor implements com.google.android.gms.vision.Dete
 
     public interface TextBlockValidator {
         boolean isValid(TextBlock item);
+
     }
 
     public interface CodeProcessorListener {
         void onReceiveDetection(TextBlock item);
+
     }
 }
